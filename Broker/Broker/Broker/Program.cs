@@ -17,7 +17,7 @@ namespace Broker
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
                 .UseStartup<Startup>()
-                .UseApplicationInsights()
+                .UseUrls("http://*:8080")
                 .Build();
 
             host.Run();
