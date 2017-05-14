@@ -1,8 +1,10 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Broker"
+    "\\Broker",
+    "\\Broker\\Broker",
+    "\\Broker\\Broker\\Broker"
   ],
-  "SelectedNode": "\\Broker",
+  "SelectedNode": "\\Broker\\Broker\\Broker\\Startup.cs",
   "PreviewInSolutionExplorer": false
 }

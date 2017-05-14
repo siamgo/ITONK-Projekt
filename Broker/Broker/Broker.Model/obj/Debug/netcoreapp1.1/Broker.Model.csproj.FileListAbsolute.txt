@@ -1,0 +1,7 @@
+C:\Users\siamg\Source\Repos\ITONK-Projekt\Broker\Broker\Broker.Model\bin\Debug\netcoreapp1.1\Broker.Model.deps.json
+C:\Users\siamg\Source\Repos\ITONK-Projekt\Broker\Broker\Broker.Model\bin\Debug\netcoreapp1.1\Broker.Model.dll
+C:\Users\siamg\Source\Repos\ITONK-Projekt\Broker\Broker\Broker.Model\bin\Debug\netcoreapp1.1\Broker.Model.pdb
+C:\Users\siamg\Source\Repos\ITONK-Projekt\Broker\Broker\Broker.Model\obj\Debug\netcoreapp1.1\Broker.Model.AssemblyInfo.cs
+C:\Users\siamg\Source\Repos\ITONK-Projekt\Broker\Broker\Broker.Model\obj\Debug\netcoreapp1.1\Broker.Model.dll
+C:\Users\siamg\Source\Repos\ITONK-Projekt\Broker\Broker\Broker.Model\obj\Debug\netcoreapp1.1\Broker.Model.pdb
+C:\Users\siamg\Source\Repos\ITONK-Projekt\Broker\Broker\Broker.Model\obj\Debug\netcoreapp1.1\Broker.Model.csprojResolveAssemblyReference.cache
