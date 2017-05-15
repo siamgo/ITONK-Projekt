@@ -22,6 +22,7 @@ namespace PublicShareOwnerControl
             Configuration = builder.Build();
         }
 
+        
         public IConfigurationRoot Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -36,7 +37,10 @@ namespace PublicShareOwnerControl
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-
+            loggerFactory.AddDebug( LogLevel.Debug );
+            var logger = loggerFactory.CreateLogger("Startup");
+            logger.LogWarning("Logger configured!");
+            
             app.UseMvc();
         }
     }
