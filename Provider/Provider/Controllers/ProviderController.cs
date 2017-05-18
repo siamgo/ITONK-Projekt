@@ -12,9 +12,6 @@ namespace Provider.Controllers
     [Route("api/Provider")]
     public class ProviderController : Controller
     {
-        //Static so it's not created at each call and returning the same value
-        private static readonly Random Randomizer = new Random();
-
         //// GET: api/Provider
         //[HttpGet]
         //public IEnumerable<string> Get()
