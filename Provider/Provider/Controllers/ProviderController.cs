@@ -49,7 +49,8 @@ namespace Provider.Controllers
 
         [HttpGet]
         [Route("Buy")]
-        public bool Buy()
+        //Localhost example http://localhost:49814/api/provider/buy?id=11&price=10&amount=5322
+        public bool Buy(int id, int amount, int price)
         {           
             return new Random().Next(0, 2) == 1;
         }
