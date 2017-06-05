@@ -75,7 +75,7 @@ namespace Provider.Controllers
 
                 var responseJson = await response.Content.ReadAsStringAsync();
 
-                if (responseJson == null)
+                if (string.IsNullOrWhiteSpace(responseJson) || responseJson == "null")
                     return false;
 
                 var stock = JsonConvert.DeserializeObject<Stock>(responseJson);
