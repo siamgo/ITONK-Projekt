@@ -31,9 +31,9 @@ namespace Provider.Controllers
         [HttpGet]
         [Route("Sell")]
         //Localhost example http://localhost:49814/api/provider/sell?userId=11&stockId=10&amount=5322&price=233
-        public bool Sell(int? userId, int? stockId, int? amount, int? price)
+        public bool Sell(string userId, int? stockId, int? amount, int? price)
         {
-            if (userId == null || stockId == null || amount == null || price == null)
+            if (string.IsNullOrEmpty(userId) || stockId == null || amount == null || price == null)
                 return false;
 
             return new Random().Next(0, 2) == 1;
