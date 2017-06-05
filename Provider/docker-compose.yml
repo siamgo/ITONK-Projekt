@@ -1,8 +1,0 @@
-version: '2'
-
-services:
-  provider:
-    image: provider
-    build:
-      context: ./Provider
-      dockerfile: Dockerfile
