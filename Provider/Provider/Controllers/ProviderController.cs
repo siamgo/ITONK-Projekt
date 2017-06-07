@@ -25,15 +25,83 @@ namespace Provider.Controllers
             if(!CheckIfStocksAreAvailable(userId, stockId, amount).Result)
                 return false;
 
-            //Call other service    
-            //SendTransaction(userId, stockId, amount, price);
-
+            //Call other service
+            try
+            {
+                SendTransaction(userId, stockId, amount, price);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Failed calling broker service " + e);
+                return false;
+            }
+          
             return true;
         }
 
         private void SendTransaction(string userId, int? stockId, uint? amount, int? price)
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Trying to get environment variables");
+
+            string hostName, portName;
+
+            try
+            {
+                hostName = Environment.GetEnvironmentVariable("BROKER_SERVICE_HOST");
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Failed getting environment variable BROKER_SERVICE_HOST");
+                throw;
+            }
+
+            try
+            {
+                portName = Environment.GetEnvironmentVariable("BROKER_SERVICE_PORT");
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Failed getting environment variable BROKER_SERVICE_PORT");
+                throw;
+            }
+
+            if (hostName == null)
+            {
+                Console.WriteLine("BROKER_SERVICE_HOST environment variable was null");
+                throw new NullReferenceException(nameof(hostName));
+            }
+
+            if (portName == null)
+            {
+                Console.WriteLine("BROKER_SERVICE_PORT environment variable was null");
+                throw new NullReferenceException(nameof(portName));
+            }
+
+            var baseUrl = hostName + ":" + portName;
+        
+            Console.WriteLine("Base url is " + baseUrl);
+            //Console.WriteLine("Trying to send request to Broker Service");
+
+            //var endPoint = "/api/broker";
+
+            //var combinedUrl = baseUrl + endPoint;
+
+            //using (var client = new HttpClient())
+            //{
+            //    var response = await client.GetAsync(path);
+
+            //    if (!response.IsSuccessStatusCode) return false;
+
+            //    var responseJson = await response.Content.ReadAsStringAsync();
+
+            //    if (string.IsNullOrWhiteSpace(responseJson) || responseJson == "null")
+            //        return false;
+
+            //    var stock = JsonConvert.DeserializeObject<Stock>(responseJson);
+
+            //    return stock.Amount >= amount;
+            //}
+
         }
 
         private async Task<bool> CheckIfStocksAreAvailable(string userId, int? stockId, uint? amount)
