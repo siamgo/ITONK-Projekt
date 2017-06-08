@@ -9,3 +9,5 @@ C:\Users\siamg\Source\Repos\ITONK-Projekt\Broker\Broker\Broker\obj\Debug\netcore
 C:\Users\siamg\Source\Repos\ITONK-Projekt\Broker\Broker\Broker\obj\Debug\netcoreapp1.1\Broker.pdb
 C:\Users\siamg\Source\Repos\ITONK-Projekt\Broker\Broker\Broker\bin\Debug\netcoreapp1.1\Broker.Model.dll
 C:\Users\siamg\Source\Repos\ITONK-Projekt\Broker\Broker\Broker\bin\Debug\netcoreapp1.1\Broker.Model.pdb
+C:\Users\siamg\Source\Repos\ITONK-Projekt\Broker\Broker\Broker\bin\Debug\netcoreapp1.1\Broker.Business.dll
+C:\Users\siamg\Source\Repos\ITONK-Projekt\Broker\Broker\Broker\bin\Debug\netcoreapp1.1\Broker.Business.pdb
