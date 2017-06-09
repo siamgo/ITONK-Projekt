@@ -1,16 +1,13 @@
-FROM microsoft/aspnet
+FROM microsoft/dotnet:1.0-sdk
+LABEL Name=provider Version=0.0.1 
+ARG source=.
 WORKDIR /app
+EXPOSE 6000
 
-# copy csproj and restore as distinct layers
+COPY $source .
 
-COPY Provider.csproj .
-RUN dotnet restore
+RUN ["dotnet", "restore"]
 
-# copy and build everything else
+RUN ["dotnet", "build"]
 
-COPY . .
-
-# RUN dotnet restore
-RUN dotnet publish -c Release -o out
-
-ENTRYPOINT ["dotnet", "out/Provider.dll", "--server.urls", "http://0.0.0.0:5000"]
+ENTRYPOINT ["dotnet", "run"]
