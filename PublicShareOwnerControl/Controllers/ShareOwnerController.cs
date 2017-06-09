@@ -16,6 +16,7 @@ namespace ShareOwnerController
      public class ShareOwnerController : Controller
      {
         private FireBaseLogger _fbLogger;
+        private string _guid;
         private string TAG = "PUBLICSHAREOWNER: ";
          public ShareOwnerController()
          {
@@ -35,9 +36,16 @@ namespace ShareOwnerController
                 if (response.IsSuccessStatusCode)
                 {
                     var responseJson = await response.Content.ReadAsStringAsync();
-                    var owners = JsonConvert.DeserializeObject<List<ShareOwner>>(responseJson);
-                    this._fbLogger.Log(TAG + "SUCCESS in GET: api/shareowner");
-                    return owners;
+                    try 
+                    {
+                        
+                        var owners = JsonConvert.DeserializeObject<List<ShareOwner>>(responseJson);
+                        this._fbLogger.Log(TAG + "SUCCESS in GET: api/shareowner");
+                        return owners;
+                    }catch(JsonSerializationException e){
+                        return null;
+                    }
+                  
                 }
                 this._fbLogger.Log(TAG + "ERROR in GET: api/shareowner");
                 return null;
@@ -76,33 +84,33 @@ namespace ShareOwnerController
          [HttpPost]
          public async void Post([FromBody]ShareOwner shareowner)
          {
-             shareowner = new ShareOwner{
-                    Name = "hej",
-                    CustomerId = 1,
-                    Stocks = new List<Stock>{
-                        new Stock{
-                            Name = "Itonk",
-                            StockId = 1,
-                            Price = 1.0,
-                            Amount = 4
+
+                           
+                if(shareowner != null)
+                {
+                    using (var client = new HttpClient())
+                    {
+                        var baseUri = "https://itonk-grp2.firebaseio.com/shareowners.json";
+                        client.BaseAddress = new Uri(baseUri);
+                        client.DefaultRequestHeaders.Accept.Clear();
+
+                        //get all shareowners
+                        var allOwners = await client.GetAsync(baseUri);
+                        if(allOwners.IsSuccessStatusCode){
+                            //var temp = JsonConvert.DeserializeObject<Dictionary<string,List<ShareOwner>>>(await allOwners.Content.ReadAsStringAsync());
+                            string ownercontent = await allOwners.Content.ReadAsStringAsync();
+                            var owners = JsonConvert.DeserializeObject<List<ShareOwner>>(ownercontent);
+                            owners.Add(shareowner);
+                            var jsonShare = JsonConvert.SerializeObject(owners);
+                            Console.WriteLine(jsonShare);
+                            var content = new StringContent(jsonShare.ToString(),Encoding.UTF8,"application/json");
+                            var response = await client.PutAsync(baseUri,content);
+                            
+                            this._fbLogger.Log(TAG+"SUCCESS in POST: api/shareowner");
                         }
                     }
-                };
-             List<ShareOwner> owners = new List<ShareOwner>{
-                shareowner
-             };
-                
-                
-                using (var client = new HttpClient())
-                {
-                    var baseUri = "https://itonk-grp2.firebaseio.com/shareowners.json/";
-                    client.BaseAddress = new Uri(baseUri);
-                    client.DefaultRequestHeaders.Accept.Clear();
-
-                    var jsonShare = JsonConvert.SerializeObject(owners);
-                    Console.WriteLine(jsonShare);
-                    var content = new StringContent(jsonShare.ToString(),Encoding.UTF8,"application/json");
-                    var response = await client.PutAsync(baseUri,content);
+                }else{
+                    this._fbLogger.Log(TAG + "FAILURE in POST: api/shareowner" );
                 }
          }
 
