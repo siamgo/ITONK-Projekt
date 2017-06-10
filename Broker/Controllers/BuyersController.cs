@@ -84,8 +84,12 @@ namespace Broker.Controllers
                     }
                     
                 }
-
-                soldBy.Stocks.Remove(stockToRemove);
+                
+                if(soldBy != null && soldBy.Stocks != null && stockToRemove != null)
+                {
+                    soldBy.Stocks.Remove(stockToRemove);
+                }
+                
                 await client.PutAsync("https://itonk-grp2.firebaseio.com/Broker/Seller.json",sellers);
                 
                 // post to Shareowner
