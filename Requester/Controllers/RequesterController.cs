@@ -12,15 +12,17 @@ namespace Requester
 {
     public class RequesterController : Controller
     {
-    
+
         // POST /api/Request
         [HttpPost]
         [Route("Request")]
-        public bool Post([FromQuery] string stockname,[FromQuery]int amount,[FromQuery]int customerid){
-            
+        public async Task<bool> PostAsync([FromQuery] string stockname, [FromQuery]int amount, [FromQuery]int customerid)
+        {
+
             //Could check customerID in some sort of DB to get more info
-            
-            var shareowner = new ShareOwner(){
+
+            var shareowner = new ShareOwner()
+            {
                 Name = "Requester",
                 CustomerId = customerid,
                 Stocks = new List<Stock>() {
@@ -28,12 +30,18 @@ namespace Requester
                         StockId = getStockId(stockname),
                         Name = stockname,
                         Amount = amount,
-                        Price = 0 
-                    
+                        Price = 0
+
                 }}
             };
 
-            return true;
+            if(await buy(shareowner))
+            {
+                await payTobinTax(shareowner);
+                return true;    
+            }
+
+            return false;
         }
 
         private int getStockId(string stockname){
