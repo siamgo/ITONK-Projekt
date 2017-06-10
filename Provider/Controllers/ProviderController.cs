@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -96,18 +97,20 @@ namespace Provider.Controllers
 
             try
             {
-                var queryString = "?" + nameof(userId) + "=" + userId +
-                                  "&" + nameof(stockId) + "=" + stockId +
-                                  "&" + nameof(amount) + "=" + amount +
-                                  "&" + nameof(price) + "=" + price;
-
-                var finalUrl = combinedUrl + queryString;
-
-                Console.WriteLine("Trying to call url " + finalUrl);
-
                 using (var client = new HttpClient())
                 {
-                    var response = await client.PostAsync(combinedUrl, null);
+                    var dictionary = new Dictionary<string, string>();
+
+                    dictionary.Add(nameof(userId), userId);
+                    dictionary.Add(nameof(stockId), stockId.ToString());
+                    dictionary.Add(nameof(amount), amount.ToString());
+                    dictionary.Add(nameof(price), price.ToString());
+
+                    Console.WriteLine("Trying to call url " + combinedUrl);
+
+                    var content = new FormUrlEncodedContent(dictionary);
+
+                    var response = await client.PostAsync(combinedUrl, content);
 
                     return response.IsSuccessStatusCode;
                 }
