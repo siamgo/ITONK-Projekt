@@ -92,7 +92,7 @@ namespace Provider.Controllers
 
             const string endPoint = "/Sellers/Sell";
 
-            var combinedUrl = baseUrl + endPoint;
+            var combinedUrl = "http://" + baseUrl + endPoint;
 
             try
             {
