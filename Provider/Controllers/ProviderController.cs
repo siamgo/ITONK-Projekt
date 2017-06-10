@@ -95,22 +95,22 @@ namespace Provider.Controllers
 
             var combinedUrl = "http://" + baseUrl + endPoint;
 
+            var queryString = "?" + nameof(userId) + "=" + userId +
+                              "&" + nameof(stockId) + "=" + stockId +
+                              "&" + nameof(amount) + "=" + amount +
+                              "&" + nameof(price) + "=" + price;
+            
+            var finalUrl = combinedUrl + queryString;
+
             try
             {
                 using (var client = new HttpClient())
                 {
-                    var dictionary = new Dictionary<string, string>();
+                    Console.WriteLine("Trying to call url " + finalUrl);
 
-                    dictionary.Add(nameof(userId), userId);
-                    dictionary.Add(nameof(stockId), stockId.ToString());
-                    dictionary.Add(nameof(amount), amount.ToString());
-                    dictionary.Add(nameof(price), price.ToString());
+                    var content = new StringContent(string.Empty, System.Text.Encoding.UTF8, "application/json");
 
-                    Console.WriteLine("Trying to call url " + combinedUrl);
-
-                    var content = new FormUrlEncodedContent(dictionary);
-
-                    var response = await client.PostAsync(combinedUrl, content);
+                    var response = await client.PostAsync(finalUrl, content);
 
                     return response.IsSuccessStatusCode;
                 }
