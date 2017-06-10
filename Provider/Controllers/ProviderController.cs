@@ -97,9 +97,9 @@ namespace Provider.Controllers
             try
             {
                 var queryString = "?" + nameof(userId) + "=" + userId +
-                                  "?" + nameof(stockId) + "=" + stockId +
-                                  "?" + nameof(amount) + "=" + amount +
-                                  "?" + nameof(price) + "=" + price;
+                                  "&" + nameof(stockId) + "=" + stockId +
+                                  "&" + nameof(amount) + "=" + amount +
+                                  "&" + nameof(price) + "=" + price;
 
                 var finalUrl = combinedUrl + queryString;
 
