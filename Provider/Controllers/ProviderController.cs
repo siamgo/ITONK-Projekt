@@ -1,4 +1,5 @@
 using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -10,36 +11,44 @@ namespace Provider.Controllers
     [Produces("application/json")]
     [Route("api/Provider")]
     public class ProviderController : Controller
-    {        
-        [HttpGet]
+    {
+        [HttpPost]
         [Route("Sell")]
         //Localhost example http://localhost:49814/api/provider/sell?userId=11&stockId=10&amount=5322&price=233
-        public bool Sell(string userId, int? stockId, uint? amount, int? price)
+        public async Task<IActionResult> Sell(string userId, int? stockId, uint? amount, int? price)
         {
             if (string.IsNullOrEmpty(userId) || stockId == null || amount == null || price == null)
-                return false;
+            {
+                return BadRequest("One of the required parameters were null");
+            }
 
             if (amount == 0)
-                return false;
+            {
+                return BadRequest("Amount cannot be 0");
+            }
 
-            if(!CheckIfStocksAreAvailable(userId, stockId, amount).Result)
-                return false;
+            if (!CheckIfStocksAreAvailable(userId, stockId, amount).Result)
+            {
+                return BadRequest("Seller does not have the required stocks");
+            }
 
             //Call other service
             try
             {
-                SendTransaction(userId, stockId, amount, price);
+                var result = await SendTransaction(userId, stockId, amount, price);
+
+                if (result)
+                    return Ok();
+
+                return StatusCode(500, "Failed calling broker service");
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                Console.WriteLine("Failed calling broker service " + e);
-                return false;
+                return StatusCode(500, "Failed calling broker service");
             }
-          
-            return true;
         }
 
-        private void SendTransaction(string userId, int? stockId, uint? amount, int? price)
+        private async Task<bool> SendTransaction(string userId, int? stockId, uint? amount, int? price)
         {
             Console.WriteLine("Trying to get environment variables");
 
@@ -78,30 +87,36 @@ namespace Provider.Controllers
             }
 
             var baseUrl = hostName + ":" + portName;
-        
-            Console.WriteLine("Base url is " + baseUrl);
-            //Console.WriteLine("Trying to send request to Broker Service");
 
-            //var endPoint = "/api/broker";
+            Console.WriteLine("Base url of broker service is " + baseUrl);
 
-            //var combinedUrl = baseUrl + endPoint;
+            const string endPoint = "/Sellers/Sell";
 
-            //using (var client = new HttpClient())
-            //{
-            //    var response = await client.GetAsync(path);
+            var combinedUrl = baseUrl + endPoint;
 
-            //    if (!response.IsSuccessStatusCode) return false;
+            try
+            {
+                var queryString = "?" + nameof(userId) + "=" + userId +
+                                  "?" + nameof(stockId) + "=" + stockId +
+                                  "?" + nameof(amount) + "=" + amount +
+                                  "?" + nameof(price) + "=" + price;
 
-            //    var responseJson = await response.Content.ReadAsStringAsync();
+                var finalUrl = combinedUrl + queryString;
 
-            //    if (string.IsNullOrWhiteSpace(responseJson) || responseJson == "null")
-            //        return false;
+                Console.WriteLine("Trying to call url " + finalUrl);
 
-            //    var stock = JsonConvert.DeserializeObject<Stock>(responseJson);
+                using (var client = new HttpClient())
+                {
+                    var response = await client.PostAsync(combinedUrl, null);
 
-            //    return stock.Amount >= amount;
-            //}
-
+                    return response.IsSuccessStatusCode;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         private async Task<bool> CheckIfStocksAreAvailable(string userId, int? stockId, uint? amount)
@@ -115,7 +130,7 @@ namespace Provider.Controllers
                 path += "stocks/";
                 path += stockId;
                 path += ".json";
-               
+
                 var response = await client.GetAsync(path);
 
                 if (!response.IsSuccessStatusCode) return false;
