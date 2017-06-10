@@ -22,7 +22,7 @@ namespace ShareOwnerController
          {
             this._fbLogger = new FireBaseLogger();
          }
-         // GET: api/shareowners/
+         // GET: api/shareowner/
          [HttpGet]
          public async Task<List<ShareOwner>> Get()
          {
@@ -52,7 +52,7 @@ namespace ShareOwnerController
             }
          }
          
-         // GET: api/shareowners/search?name=something
+         // GET: api/shareowner/search?name=something
          [HttpGet("Search")]
          public async Task<ShareOwner> Search(string name)
          {
