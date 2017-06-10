@@ -82,8 +82,8 @@ namespace Requester
 
                         //get all shareowners
                         var jsonShareOwner = JsonConvert.SerializeObject(shareowner);
-                        var content = new StringContent(jsonShareOwner); //Might not work
-                        var allOwners = await client.PostAsync(endpoint + "/Buyers/Buy",content);
+                        var content = new StringContent(jsonShareOwner, Encoding.UTF8, "application/json");
+                        var allOwners = await client.PostAsync(endpoint + "Buyers/Buy",content);
 
                         if(allOwners.IsSuccessStatusCode){
                             return true;
